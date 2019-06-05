@@ -105,8 +105,8 @@ func TestWalletManager_GetTransactionByWxID(t *testing.T) {
 
 func TestWalletManager_GetAssetsAccountBalance(t *testing.T) {
 	tm := testInitWalletManager()
-	walletID := "WEyoXkvytkkbK7RJLdoS4H7hbdjDAvRXjY"
-	accountID := "D9VaHgK694tJ7AkSCmKpUHotN3XrrFqPHQGMnTypBVEU"
+	walletID := "W2NfBv7q2YqXuL7DvG4MSG69j2gGa4D2R2"
+	accountID := "EeWmwZuMrrnUET56SHLaPUnRdHQH56r8GRJcg8tgRGku"
 
 	balance, err := tm.GetAssetsAccountBalance(testApp, walletID, accountID)
 	if err != nil {
@@ -116,27 +116,7 @@ func TestWalletManager_GetAssetsAccountBalance(t *testing.T) {
 	log.Info("balance:", balance)
 }
 
-func TestWalletManager_GetAssetsAccountTokenBalance(t *testing.T) {
-	tm := testInitWalletManager()
-	walletID := "WEyoXkvytkkbK7RJLdoS4H7hbdjDAvRXjY"
-	//accountID := "D9VaHgK694tJ7AkSCmKpUHotN3XrrFqPHQGMnTypBVEU"
-	accountID := "AwxbDgWv6d8DUFk36SNWGw3y6GE9RbZtVGjAsQqP3u5y"
 
-	contract := openwallet.SmartContract{
-		Address:  "eosio.token",
-		Symbol:   "PIA",
-		Name:     "PIA",
-		Token:    "PIA",
-		Decimals: 4,
-	}
-
-	balance, err := tm.GetAssetsAccountTokenBalance(testApp, walletID, accountID, contract)
-	if err != nil {
-		log.Error("GetAssetsAccountTokenBalance failed, unexpected error:", err)
-		return
-	}
-	log.Info("balance:", balance.Balance)
-}
 
 func TestWalletManager_GetEstimateFeeRate(t *testing.T) {
 	tm := testInitWalletManager()
@@ -152,7 +132,7 @@ func TestWalletManager_GetEstimateFeeRate(t *testing.T) {
 }
 
 func TestGetAddressBalance(t *testing.T) {
-	symbol := "VSYS"
+	symbol := "PIA"
 	assetsMgr, err := openw.GetAssetsAdapter(symbol)
 	if err != nil {
 		log.Error(symbol, "is not support")
@@ -169,12 +149,8 @@ func TestGetAddressBalance(t *testing.T) {
 	bs := assetsMgr.GetBlockScanner()
 
 	addrs := []string{
-		"AR5D3fGVWDz32wWCnVbwstsMW8fKtWdzNFT",
-		"AR9qbgbsmLh3ADSU9ngR22J2HpD5D9ncTCg",
-		"ARAA8AnUYa4kWwWkiZTTyztG5C6S9MFTx11",
-		"ARCUYWyLvGDTrhZ6K9jjMh9B5iRVEf3vRzs",
-		"ARGehumz77nGcfkQrPjK4WUyNevvU9NCNqQ",
-		"ARJdaB9Fo6Sk2nxBrQP2p4woWotPxjaebCv",
+		"kencani",
+		"kencani4",
 	}
 
 	balances, err := bs.GetBalanceByAddress(addrs...)

@@ -156,23 +156,23 @@ func TestTransfer(t *testing.T) {
 
 func TestSummary(t *testing.T) {
 	tm := testInitWalletManager()
-	walletID := "WEyoXkvytkkbK7RJLdoS4H7hbdjDAvRXjY"
-	accountID := "AwxbDgWv6d8DUFk36SNWGw3y6GE9RbZtVGjAsQqP3u5y"
-	summaryAddress := "eostesterabc"
+	walletID := "W2NfBv7q2YqXuL7DvG4MSG69j2gGa4D2R2"
+	accountID := "EeWmwZuMrrnUET56SHLaPUnRdHQH56r8GRJcg8tgRGku"
+	summaryAddress := "kencani"
 
-	contract := openwallet.SmartContract{
-		Address:  "eosio.token",
-		Symbol:   "PIA",
-		Name:     "PIA",
-		Token:    "PIA",
-		Decimals: 4,
-	}
+	//contract := openwallet.SmartContract{
+	//	Address:  "eosio.token",
+	//	Symbol:   "PIA",
+	//	Name:     "PIA",
+	//	Token:    "PIA",
+	//	Decimals: 4,
+	//}
 
 	testGetAssetsAccountBalance(tm, walletID, accountID)
 
 	rawTxArray, err := testCreateSummaryTransactionStep(tm, walletID, accountID,
 		summaryAddress, "", "", "",
-		0, 100, &contract)
+		0, 100, nil)
 	if err != nil {
 		log.Errorf("CreateSummaryTransaction failed, unexpected error: %v", err)
 		return

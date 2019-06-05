@@ -151,7 +151,6 @@ func (this *Client) GetBalance(account string) (*ApiBalance, error) {
 		return nil, errors.New("result of block number type error")
 	}
 
-	log.Warn("result:", result.Raw)
 
 	var apiBalances []*ApiBalance
 	err = json.Unmarshal([]byte(result.Raw), &apiBalances)

@@ -23,7 +23,6 @@ import (
 	"github.com/blocktree/go-owcrypt"
 	"github.com/eoscanada/eos-go"
 	"github.com/pkg/errors"
-	"github.com/siddontang/go/log"
 	"time"
 
 	"github.com/blocktree/openwallet/openwallet"
@@ -228,19 +227,19 @@ func (decoder *TransactionDecoder) SubmitRawTransaction(wrapper openwallet.Walle
 	paramss = append(paramss, params)
 
 	tranSub := &TransConMainSub{
-		RefBlockNum:stx.RefBlockNum,
-		RefBlockPrefix:stx.RefBlockPrefix,
-		Expiration: stx.Expiration,
-		Signatures: stx.Signatures,
-		Extensions: stx.Extensions,
-		Operations: paramss,
+		RefBlockNum:    stx.RefBlockNum,
+		RefBlockPrefix: stx.RefBlockPrefix,
+		Expiration:     stx.Expiration,
+		Signatures:     stx.Signatures,
+		Extensions:     stx.Extensions,
+		Operations:     paramss,
 	}
 	resultee, err := decoder.wm.Api.PushTransaction(tranSub)
 	if err != nil {
 		return nil, fmt.Errorf("push transaction: %s", err)
 	}
 
-	log.Warn(resultee)
+	//log.Warn(resultee)
 	//log.Infof("Transaction [%s] submitted to the network successfully.", hex.EncodeToString(response.Processed.ID))
 
 	rawTx.TxID = resultee.Id
@@ -270,7 +269,7 @@ func (decoder *TransactionDecoder) SubmitRawTransaction(wrapper openwallet.Walle
 
 //GetRawTransactionFeeRate 获取交易单的费率
 func (decoder *TransactionDecoder) GetRawTransactionFeeRate() (feeRate string, unit string, err error) {
-	return "", "", nil
+	return "0", "pia", nil
 }
 
 //CreateSummaryRawTransaction 创建汇总交易
@@ -381,12 +380,12 @@ func (decoder *TransactionDecoder) createRawTransaction(
 	memo string) *openwallet.Error {
 	apiHead, err := decoder.wm.Api.getDynamicGlobal()
 	if err != nil {
-		return openwallet.NewError(3004,"createRawTransaction-getDynamicGlobal err :" + err.Error())
+		return openwallet.NewError(3004, "createRawTransaction-getDynamicGlobal err :"+err.Error())
 	}
 
 	apiBlock, err := decoder.wm.Api.getGetBlock(uint64(apiHead.LastIrreversible))
 	if err != nil {
-		return openwallet.NewError(3004,"createRawTransaction-getGetBlock err :" + err.Error())
+		return openwallet.NewError(3004, "createRawTransaction-getGetBlock err :"+err.Error())
 	}
 
 	var (
@@ -430,15 +429,15 @@ func (decoder *TransactionDecoder) createRawTransaction(
 	//extensionTime,_ := time.Parse("2006-01-02T15:04:05","2019-06-04T10:51:06")
 	realTime := extensionTime.Format(eos.JSONTimeFormat)
 
-	eosTime,err := eos.ParseJSONTime(realTime)
-	if err != nil{
-		return openwallet.NewError(3001,"createRawTransaction-ParseJSONTime err :" + err.Error())
+	eosTime, err := eos.ParseJSONTime(realTime)
+	if err != nil {
+		return openwallet.NewError(3001, "createRawTransaction-ParseJSONTime err :"+err.Error())
 	}
 	transCoin := &TransConMain{
-		RefBlockNum:apiHead.GetRefBlockNum(),
-		RefBlockPrefix:apiBlock.GetRefBlockPrefix(),
-		Expiration:eosTime,
-		Operations: paramss,
+		RefBlockNum:    apiHead.GetRefBlockNum(),
+		RefBlockPrefix: apiBlock.GetRefBlockPrefix(),
+		Expiration:     eosTime,
+		Operations:     paramss,
 	}
 
 	txdata, err := eos.MarshalBinary(transCoin)
@@ -463,19 +462,19 @@ func (decoder *TransactionDecoder) createRawTransaction(
 	//交易哈希
 	//sigDigest := eos.SigDigest(chainId, txdata, nil)
 
-	sigDigest := make([]byte,0)
-	for _,v := range chainId{
+	sigDigest := make([]byte, 0)
+	for _, v := range chainId {
 		sigDigest = append(sigDigest, v)
 	}
-	for _,v := range txdata{
+	for _, v := range txdata {
 		sigDigest = append(sigDigest, v)
 	}
 	if len(addresses) == 0 {
 		return openwallet.Errorf(openwallet.ErrCreateRawTransactionFailed, "[%s] have not PIA public key", accountID)
 	}
 	sig256 := sha256.Sum256(sigDigest)
-	sigDigest2 := make([]byte,0)
-	for _,v := range sig256{
+	sigDigest2 := make([]byte, 0)
+	for _, v := range sig256 {
 		sigDigest2 = append(sigDigest2, v)
 	}
 	for _, addr := range addresses {
