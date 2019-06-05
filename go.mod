@@ -1,4 +1,4 @@
-module github.com/blocktree/eosio-adapter
+module github.com/blocktree/futurepia-adapter
 
 require (
 	github.com/asdine/storm v2.1.2+incompatible
