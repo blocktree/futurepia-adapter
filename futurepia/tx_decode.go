@@ -19,7 +19,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
-	"github.com/blocktree/eosio-adapter/futurepia_txsigner"
+	"github.com/blocktree/futurepia-adapter/futurepia_txsigner"
 	"github.com/blocktree/go-owcrypt"
 	"github.com/eoscanada/eos-go"
 	"github.com/pkg/errors"

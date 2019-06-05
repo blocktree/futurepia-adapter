@@ -1,7 +1,7 @@
 package openwtester
 
 import (
-	"github.com/blocktree/eosio-adapter/futurepia"
+	"github.com/blocktree/futurepia-adapter/futurepia"
 	"github.com/blocktree/openwallet/log"
 	"github.com/blocktree/openwallet/openw"
 )
