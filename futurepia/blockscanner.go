@@ -585,6 +585,38 @@ func (bs *PIABlockScanner) GetGlobalHeadBlock() (block *ApiBlock, err error) {
 
 	return
 }
+//GetScannedBlockHeader 获取当前扫描的区块头
+func (bs *PIABlockScanner) GetScannedBlockHeader() (*openwallet.BlockHeader, error) {
+
+	var (
+		blockHeader *openwallet.BlockHeader
+		blockHeight uint64 = 0
+		hash        string
+		err         error
+	)
+
+	head, err := bs.GetGlobalHeadBlock()
+	blockHeight = uint64(head.Height)
+	//如果本地没有记录，查询接口的高度
+	if blockHeight == 0 {
+		blockHeader, err = bs.GetCurrentBlockHeader()
+		if err != nil {
+
+			return nil, err
+		}
+		blockHeight = blockHeader.Height
+		//就上一个区块链为当前区块
+		blockHeight = blockHeight - 1
+		curBlock, err := bs.wm.Api.getGetBlock(uint64(blockHeight))
+		if err != nil {
+			return nil, err
+		}
+		hash = curBlock.Hash
+	}
+
+	return &openwallet.BlockHeader{Height: blockHeight, Hash: hash}, nil
+}
+
 
 //GetScannedBlockHeight 获取已扫区块高度
 func (bs *PIABlockScanner) GetScannedBlockHeight() uint64 {

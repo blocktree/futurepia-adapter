@@ -134,6 +134,7 @@ func (this *Client) getDynamicGlobal() (*ApiHeadBlock, error) {
 
 //根据高度获取区块
 func (this *Client) GetBalance(account string) (*ApiBalance, error) {
+	time.Sleep(200 * time.Millisecond)
 	params := []interface{}{
 		"database_api",
 		"get_accounts",
@@ -212,7 +213,9 @@ func (this *Client) getGetBlock(block uint64) (*ApiBlock, error) {
 		log.Errorf("decode json [%v] failed, err=%v", []byte(result.Raw), err)
 		return nil, err
 	}
-
+	if apiHeadBlock != nil && apiHeadBlock.Height ==0{
+		apiHeadBlock.Height = int64(block)
+	}
 	//转换时间位unix
 
 	loc := time.FixedZone("GMT", 0) //设置时区 GMT 0
@@ -294,7 +297,7 @@ func (this *Client) PushTransaction(packedTx interface{}) (*ApiTransResult, erro
 }
 
 func (c *Client) Call(method string, id int64, params []interface{}) (*gjson.Result, error) {
-	time.Sleep(200 * time.Millisecond)
+	time.Sleep(100 * time.Millisecond)
 	authHeader := req.Header{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",
