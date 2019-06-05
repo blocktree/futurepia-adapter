@@ -30,6 +30,7 @@ import (
 type Client struct {
 	BaseURL string
 	Debug   bool
+	ErrorTime int
 }
 
 type Response struct {
@@ -142,19 +143,18 @@ func (this *Client) GetBalance(account string) (*ApiBalance, error) {
 	}
 
 	result, err := this.Call("call", 1, params)
-	errorTime := 0
 	if err != nil {
 		log.Errorf("get balance number faield,account = %s , err = %v \n", account, err)
-		errorTime++
-		if errorTime > 3 {
+		this.ErrorTime++
+		if this.ErrorTime > 3 {
+			this.ErrorTime = 0
 			return nil, err
 		} else {
-			time.Sleep(2*time.Second)
+			log.Errorf("reTry GetBalance")
+			time.Sleep(2 * time.Second)
 			return this.GetBalance(account)
 		}
-
 	}
-
 	if result.Type != gjson.JSON {
 		log.Errorf("result of GetBalance type error")
 		return nil, errors.New("result of block number type error")
