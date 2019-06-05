@@ -142,16 +142,23 @@ func (this *Client) GetBalance(account string) (*ApiBalance, error) {
 	}
 
 	result, err := this.Call("call", 1, params)
+	errorTime := 0
 	if err != nil {
 		log.Errorf("get balance number faield,account = %s , err = %v \n", account, err)
-		return nil, err
+		errorTime++
+		if errorTime > 3 {
+			return nil, err
+		} else {
+			time.Sleep(2*time.Second)
+			return this.GetBalance(account)
+		}
+
 	}
 
 	if result.Type != gjson.JSON {
 		log.Errorf("result of GetBalance type error")
 		return nil, errors.New("result of block number type error")
 	}
-
 
 	var apiBalances []*ApiBalance
 	err = json.Unmarshal([]byte(result.Raw), &apiBalances)
@@ -213,7 +220,7 @@ func (this *Client) getGetBlock(block uint64) (*ApiBlock, error) {
 		log.Errorf("decode json [%v] failed, err=%v", []byte(result.Raw), err)
 		return nil, err
 	}
-	if apiHeadBlock != nil && apiHeadBlock.Height ==0{
+	if apiHeadBlock != nil && apiHeadBlock.Height == 0 {
 		apiHeadBlock.Height = int64(block)
 	}
 	//转换时间位unix

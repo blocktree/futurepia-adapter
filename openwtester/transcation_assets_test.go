@@ -127,6 +127,8 @@ func TestTransfer(t *testing.T) {
 	//accountID := "F7aeTnSdjEA16x4H3n1vPtDEo9Xp5Vus11pwY5QF6K3y"
 	//to := ""
 
+    for i:=0 ; i< 20 ; i++{
+
 
 	testGetAssetsAccountBalance(tm, walletID, accountID)
 
@@ -151,7 +153,7 @@ func TestTransfer(t *testing.T) {
 	if err != nil {
 		return
 	}
-
+	}
 }
 
 func TestSummary(t *testing.T) {
