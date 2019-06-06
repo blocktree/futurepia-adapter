@@ -20,6 +20,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/blocktree/openwallet/log"
@@ -27,10 +28,13 @@ import (
 	"github.com/tidwall/gjson"
 )
 
+
 type Client struct {
-	BaseURL string
-	Debug   bool
+	BaseURL   string
+	Debug     bool
 	ErrorTime int
+	lock      sync.Mutex
+	DelayTime int64
 }
 
 type Response struct {
@@ -304,7 +308,9 @@ func (this *Client) PushTransaction(packedTx interface{}) (*ApiTransResult, erro
 }
 
 func (c *Client) Call(method string, id int64, params []interface{}) (*gjson.Result, error) {
-	time.Sleep(100 * time.Millisecond)
+	time.Sleep(time.Duration(c.DelayTime) * time.Millisecond)
+	c.lock.Lock()
+	defer c.lock.Unlock()
 	authHeader := req.Header{
 		"Accept":       "application/json",
 		"Content-Type": "application/json",

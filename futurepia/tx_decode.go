@@ -129,14 +129,14 @@ func (decoder *TransactionDecoder) SignRawTransaction(wrapper openwallet.WalletD
 			if err != nil {
 				return err
 			}
-			decoder.wm.Log.Debug("privateKey:", hex.EncodeToString(keyBytes))
+			//decoder.wm.Log.Debug("privateKey:", hex.EncodeToString(keyBytes))
 
 			hash, err := hex.DecodeString(keySignature.Message)
 			if err != nil {
 				return fmt.Errorf("decoder transaction hash failed, unexpected err: %v", err)
 			}
 
-			decoder.wm.Log.Debug("hash:", hash)
+			//decoder.wm.Log.Debug("hash:", hash)
 
 			sig, err := futurepia_txsigner.Default.SignTransactionHash(hash, keyBytes, decoder.wm.CurveType())
 			if err != nil {
