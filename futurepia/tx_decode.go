@@ -378,6 +378,7 @@ func (decoder *TransactionDecoder) createRawTransaction(
 	quantity decimal.Decimal,
 	to string,
 	memo string) *openwallet.Error {
+
 	apiHead, err := decoder.wm.Api.getDynamicGlobal()
 	if err != nil {
 		return openwallet.NewError(3004, "createRawTransaction-getDynamicGlobal err :"+err.Error())
@@ -503,8 +504,8 @@ func (decoder *TransactionDecoder) createRawTransaction(
 
 	rawTx.RawHex = hex.EncodeToString(txdataCopy)
 	rawTx.Signatures[rawTx.Account.AccountID] = keySignList
-	rawTx.FeeRate = ""
-	rawTx.Fees = ""
+	rawTx.FeeRate = "0"
+	rawTx.Fees = "0"
 	rawTx.IsBuilt = true
 	rawTx.TxAmount = accountTotalSent.String()
 	rawTx.TxFrom = txFrom

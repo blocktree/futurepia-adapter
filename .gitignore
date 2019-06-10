@@ -4,3 +4,4 @@
 */openw_data/*
 .idea/*
 util_test.go
+case_test.go
