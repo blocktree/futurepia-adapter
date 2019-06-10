@@ -425,11 +425,12 @@ func (decoder *TransactionDecoder) createRawTransaction(
 	var paramss = make([][]*ParamData, 0)
 	paramss = append(paramss, params)
 	now := time.Now()
-	mm, _ := time.ParseDuration("-450m")
+	mm, _ := time.ParseDuration("30m")
 	extensionTime := now.Add(mm)
-	//extensionTime,_ := time.Parse("2006-01-02T15:04:05","2019-06-04T10:51:06")
-	realTime := extensionTime.Format(eos.JSONTimeFormat)
 
+	loc := time.FixedZone("GMT", 0)
+
+	realTime := extensionTime.In(loc).Format(eos.JSONTimeFormat)
 	eosTime, err := eos.ParseJSONTime(realTime)
 	if err != nil {
 		return openwallet.NewError(3001, "createRawTransaction-ParseJSONTime err :"+err.Error())
