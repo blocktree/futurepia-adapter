@@ -59,7 +59,7 @@ func TestSubscribeAddress_EOS(t *testing.T) {
 		endRunning = make(chan bool, 1)
 		symbol     = "PIA"
 		addrs = map[string]string{
-			"kencani4": "sender",
+			"piajiahua": "sender",
 			//"eostesterbob": "sender",
 		}
 	)
@@ -96,7 +96,7 @@ func TestSubscribeAddress_EOS(t *testing.T) {
 
 	//log.Debug("already got scanner:", assetsMgr)
 	scanner := assetsMgr.GetBlockScanner()
-	//scanner.SetRescanBlockHeight(1584188)
+	scanner.SetRescanBlockHeight(1763830)
 
 	if scanner == nil {
 		log.Error(symbol, "is not support block scan")

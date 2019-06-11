@@ -235,12 +235,13 @@ func (this *Client) getGetBlock(block uint64) (*ApiBlock, error) {
 
 	trans := apiHeadBlock.Transactions
 	transactionIds := apiHeadBlock.TransactionIds
+	apiHeadBlock.LocalTransactions = make([]*LocalTransaction, 0)
 	if trans != nil && len(trans) > 0 && transactionIds != nil && len(transactionIds) > 0 {
 
 		for index, tran := range trans {
 			operations := tran.Operations
 			if operations != nil && len(operations) > 0 {
-				apiHeadBlock.LocalTransactions = make([]*LocalTransaction, 0)
+
 				for i, opr := range operations {
 					operationsTemp := opr.([]interface{})
 					if operationsTemp == nil || len(operationsTemp) == 0 {
