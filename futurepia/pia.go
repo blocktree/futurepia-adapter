@@ -69,6 +69,10 @@ func (wm *WalletManager) LoadAssetsConfig(c config.Configer) error {
 	wm.Api.BaseURL = wm.Config.ServerAPI
 	wm.Api.DelayTime, _ = c.Int64("delayTime")
 	wm.Config.ChainId = "0000000000000000000000000000000000000000000000000000000000000000"
+	wm.Config.DataDir = c.String("dataDir")
+
+	//数据文件夹
+	wm.Config.makeDataDir()
 	return nil
 }
 
