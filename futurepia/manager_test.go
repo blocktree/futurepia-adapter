@@ -16,7 +16,7 @@
 package futurepia
 
 func testNewWalletManager() *WalletManager {
-	wm := NewWalletManager(nil)
+	wm := NewWalletManager()
 	wm.Config.ServerAPI = "http://localhost:8888"
 	//wm.Api = eos.New(wm.Config.ServerAPI)
 	return wm

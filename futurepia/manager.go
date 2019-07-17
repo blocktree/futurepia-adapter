@@ -33,7 +33,7 @@ type WalletManager struct {
 	CacheManager    openwallet.ICacheManager        //缓存管理器
 }
 
-func NewWalletManager(cacheManager openwallet.ICacheManager) *WalletManager {
+func NewWalletManager() *WalletManager {
 	wm := WalletManager{}
 	wm.Config = NewConfig(Symbol)
 	wm.Api = new(Client)
@@ -42,6 +42,5 @@ func NewWalletManager(cacheManager openwallet.ICacheManager) *WalletManager {
 	wm.TxDecoder = NewTransactionDecoder(&wm)
 	wm.Log = log.NewOWLogger(wm.Symbol())
 	wm.ContractDecoder = NewContractDecoder(&wm)
-	wm.CacheManager = cacheManager
 	return &wm
 }

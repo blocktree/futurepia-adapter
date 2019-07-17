@@ -11,7 +11,6 @@ func init() {
 	log.Notice("Wallet Manager Load Successfully.")
 	// openw.RegAssets(eosio.Symbol, eosio.NewWalletManager(nil))
 
-	cache := futurepia.NewCacheManager()
 
-	openw.RegAssets(futurepia.Symbol, futurepia.NewWalletManager(&cache))
+	openw.RegAssets(futurepia.Symbol, futurepia.NewWalletManager())
 }
