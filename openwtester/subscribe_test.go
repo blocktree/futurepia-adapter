@@ -96,7 +96,7 @@ func TestSubscribeAddress_EOS(t *testing.T) {
 
 	//log.Debug("already got scanner:", assetsMgr)
 	scanner := assetsMgr.GetBlockScanner()
-	scanner.SetRescanBlockHeight(1763830)
+	//scanner.SetRescanBlockHeight(1763830)
 
 	if scanner == nil {
 		log.Error(symbol, "is not support block scan")

@@ -21,7 +21,7 @@ import (
 
 //TestScanBlockTask
 func TestScanBlockTask(t *testing.T) {
-	wm := NewWalletManager(nil)
+	wm := NewWalletManager()
 	wm.Config.ServerAPI = "https://node1.zbeos.com"
 	//wm.Api = eos.New(wm.Config.ServerAPI)
 	wm.Blockscanner.Scanning = true

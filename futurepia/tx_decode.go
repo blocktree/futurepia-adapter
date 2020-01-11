@@ -19,7 +19,6 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
-	"github.com/blocktree/futurepia-adapter/futurepia_txsigner"
 	"github.com/blocktree/go-owcrypt"
 	"github.com/eoscanada/eos-go"
 	"github.com/pkg/errors"
@@ -129,21 +128,25 @@ func (decoder *TransactionDecoder) SignRawTransaction(wrapper openwallet.WalletD
 			if err != nil {
 				return err
 			}
-			//decoder.wm.Log.Debug("privateKey:", hex.EncodeToString(keyBytes))
 
 			hash, err := hex.DecodeString(keySignature.Message)
 			if err != nil {
 				return fmt.Errorf("decoder transaction hash failed, unexpected err: %v", err)
 			}
 
-			//decoder.wm.Log.Debug("hash:", hash)
+			//sig, err := futurepia_txsigner.Default.SignTransactionHash(hash, keyBytes, decoder.wm.CurveType())
+			//if err != nil {
+			//	return fmt.Errorf("sign transaction hash failed, unexpected err: %v", err)
+			//}
 
-			sig, err := futurepia_txsigner.Default.SignTransactionHash(hash, keyBytes, decoder.wm.CurveType())
-			if err != nil {
-				return fmt.Errorf("sign transaction hash failed, unexpected err: %v", err)
+			signature, v, sigErr := owcrypt.Signature(keyBytes, nil, hash, decoder.wm.CurveType())
+			if sigErr == owcrypt.FAILURE {
+				return fmt.Errorf("sign transaction hash failed")
 			}
+			signature = append(signature, v)
+			keySignature.Signature = hex.EncodeToString(signature)
 
-			keySignature.Signature = hex.EncodeToString(sig)
+			//keySignature.Signature = hex.EncodeToString(sig)
 		}
 	}
 
@@ -179,19 +182,33 @@ func (decoder *TransactionDecoder) VerifyRawTransaction(wrapper openwallet.Walle
 
 			messsage, _ := hex.DecodeString(keySignature.Message)
 			signature, _ := hex.DecodeString(keySignature.Signature)
-			publicKey, _ := hex.DecodeString(keySignature.Address.PublicKey)
+			//publicKey, _ := hex.DecodeString(keySignature.Address.PublicKey)
 
-			//验证签名
-			uncompessedPublicKey := owcrypt.PointDecompress(publicKey, decoder.wm.CurveType())
-			//decoder.wm.Log.Debugf("publicKey: %s", hex.EncodeToString(uncompessedPublicKey))
-			valid, compactSig, err := futurepia_txsigner.Default.VerifyAndCombineSignature(messsage, uncompessedPublicKey[1:], signature)
-			if !valid {
+			////验证签名
+			//uncompessedPublicKey := owcrypt.PointDecompress(publicKey, decoder.wm.CurveType())
+			////decoder.wm.Log.Debugf("publicKey: %s", hex.EncodeToString(uncompessedPublicKey))
+			//valid, compactSig, err := futurepia_txsigner.Default.VerifyAndCombineSignature(messsage, uncompessedPublicKey[1:], signature)
+			//if !valid {
+			//	return fmt.Errorf("transaction verify failed: %v", err)
+			//}
+
+			_, valid := owcrypt.RecoverPubkey(signature, messsage, decoder.wm.CurveType())
+			//valid, compactSig, err := eos_txsigner.Default.VerifyAndCombineSignature(messsage, uncompessedPublicKey[1:], signature)
+			if valid == owcrypt.FAILURE {
 				return fmt.Errorf("transaction verify failed: %v", err)
 			}
 
+			//decoder.wm.Log.Debug("recover pubkey:", hex.EncodeToString(pub))
+			//decoder.wm.Log.Debug("uncompessedPublicKey:", hex.EncodeToString(uncompessedPublicKey))
+			v := signature[len(signature)-1] //签名最后一字节是v
+
+			//验签通过后处理V值，符合节点验签
+			comSig := signature[:len(signature)-1]
+			comSig = append([]byte{v+27+4}, comSig...)
+
 			tx.Signatures = append(
 				tx.Signatures,
-				hex.EncodeToString(compactSig),
+				hex.EncodeToString(comSig),
 			)
 		}
 	}

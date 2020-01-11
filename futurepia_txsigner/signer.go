@@ -10,7 +10,8 @@ type TransactionSigner struct {
 // SignTransactionHash 交易哈希签名算法
 // required
 func (singer *TransactionSigner) SignTransactionHash(msg []byte, privateKey []byte, eccType uint32) ([]byte, error) {
-	return SignCanonical(privateKey, msg)
+	//return SignCanonical(privateKey, msg)
+	return nil,nil
 }
 
 // required
