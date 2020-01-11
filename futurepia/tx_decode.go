@@ -182,29 +182,17 @@ func (decoder *TransactionDecoder) VerifyRawTransaction(wrapper openwallet.Walle
 
 			messsage, _ := hex.DecodeString(keySignature.Message)
 			signature, _ := hex.DecodeString(keySignature.Signature)
-			//publicKey, _ := hex.DecodeString(keySignature.Address.PublicKey)
-
-			////验证签名
-			//uncompessedPublicKey := owcrypt.PointDecompress(publicKey, decoder.wm.CurveType())
-			////decoder.wm.Log.Debugf("publicKey: %s", hex.EncodeToString(uncompessedPublicKey))
-			//valid, compactSig, err := futurepia_txsigner.Default.VerifyAndCombineSignature(messsage, uncompessedPublicKey[1:], signature)
-			//if !valid {
-			//	return fmt.Errorf("transaction verify failed: %v", err)
-			//}
 
 			_, valid := owcrypt.RecoverPubkey(signature, messsage, decoder.wm.CurveType())
-			//valid, compactSig, err := eos_txsigner.Default.VerifyAndCombineSignature(messsage, uncompessedPublicKey[1:], signature)
 			if valid == owcrypt.FAILURE {
 				return fmt.Errorf("transaction verify failed: %v", err)
 			}
 
-			//decoder.wm.Log.Debug("recover pubkey:", hex.EncodeToString(pub))
-			//decoder.wm.Log.Debug("uncompessedPublicKey:", hex.EncodeToString(uncompessedPublicKey))
 			v := signature[len(signature)-1] //签名最后一字节是v
 
 			//验签通过后处理V值，符合节点验签
 			comSig := signature[:len(signature)-1]
-			comSig = append([]byte{v+27+4}, comSig...)
+			comSig = append([]byte{v + 27 + 4}, comSig...)
 
 			tx.Signatures = append(
 				tx.Signatures,
@@ -502,6 +490,7 @@ func (decoder *TransactionDecoder) createRawTransaction(
 			Nonce:   "",
 			Address: addr,
 			Message: hex.EncodeToString(sigDigest2),
+			RSV:     true,
 		}
 		keySignList = append(keySignList, &signature)
 	}
