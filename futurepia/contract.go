@@ -18,7 +18,7 @@ package futurepia
 import (
 	"fmt"
 
-	"github.com/blocktree/openwallet/openwallet"
+	"github.com/blocktree/openwallet/v2/openwallet"
 )
 
 type ContractDecoder struct {

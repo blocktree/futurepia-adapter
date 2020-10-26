@@ -23,11 +23,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/blocktree/openwallet/log"
+	"github.com/blocktree/openwallet/v2/log"
 	"github.com/imroc/req"
 	"github.com/tidwall/gjson"
 )
-
 
 type Client struct {
 	BaseURL   string
@@ -138,12 +137,12 @@ func (this *Client) getDynamicGlobal() (*ApiHeadBlock, error) {
 }
 
 //根据高度获取区块
-func (this *Client) GetBalance(account string) (*ApiBalance, error) {
+func (this *Client) GetBalance(account ,feeString string) (*ApiBalance, error) {
 	time.Sleep(200 * time.Millisecond)
 	params := []interface{}{
 		"database_api",
 		"get_accounts",
-		[]interface{}{[]interface{}{account,}},
+		[]interface{}{[]interface{}{account}},
 	}
 
 	result, err := this.Call("call", 1, params)
@@ -156,7 +155,7 @@ func (this *Client) GetBalance(account string) (*ApiBalance, error) {
 		} else {
 			log.Errorf("reTry GetBalance")
 			time.Sleep(2 * time.Second)
-			return this.GetBalance(account)
+			return this.GetBalance(account,feeString)
 		}
 	}
 	if result.Type != gjson.JSON {
@@ -180,7 +179,7 @@ func (this *Client) GetBalance(account string) (*ApiBalance, error) {
 	if len(amountList) != 2 {
 		return nil, errors.New("GetBalance amountList is nil or length is not 2")
 	}
-	if amountList[1] != "PIA" {
+	if amountList[1] != feeString {
 		return nil, errors.New("GetBalance not PIA")
 	}
 	balance.Balance = amountList[0]
@@ -205,7 +204,7 @@ func (this *Client) getGetBlock(block uint64) (*ApiBlock, error) {
 	params := []interface{}{
 		"database_api",
 		"get_block",
-		[]interface{}{block,},
+		[]interface{}{block},
 	}
 	result, err := this.Call("call", 1, params)
 	if err != nil {

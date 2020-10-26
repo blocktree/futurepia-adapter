@@ -19,9 +19,9 @@ import (
 	"fmt"
 	"github.com/eoscanada/eos-go/ecc"
 
-	"github.com/blocktree/openwallet/common"
-	"github.com/blocktree/openwallet/crypto"
-	"github.com/blocktree/openwallet/openwallet"
+	"github.com/blocktree/openwallet/v2/common"
+	"github.com/blocktree/openwallet/v2/crypto"
+	"github.com/blocktree/openwallet/v2/openwallet"
 	"github.com/eoscanada/eos-go"
 )
 
@@ -111,12 +111,12 @@ type ParamDataTest struct {
 	Memo   string    `json:"memo"`
 }
 type TransConMain struct {
-	RefBlockNum    uint16          `json:"ref_block_num"`
-	RefBlockPrefix uint32          `json:"ref_block_prefix"`
-	Expiration     eos.JSONTime    `json:"expiration"`
+	RefBlockNum    uint16         `json:"ref_block_num"`
+	RefBlockPrefix uint32         `json:"ref_block_prefix"`
+	Expiration     eos.JSONTime   `json:"expiration"`
 	Operations     [][]*ParamData `json:"operations"`
-	Extensions     []interface{}   `json:"extensions"`
-	Signatures     []string        `json:"signatures"`
+	Extensions     []interface{}  `json:"extensions"`
+	Signatures     []string       `json:"signatures"`
 }
 
 type TransConMainSub struct {

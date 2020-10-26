@@ -21,8 +21,8 @@ import (
 	"github.com/shopspring/decimal"
 	"time"
 
-	"github.com/blocktree/openwallet/log"
-	"github.com/blocktree/openwallet/openwallet"
+	"github.com/blocktree/openwallet/v2/log"
+	"github.com/blocktree/openwallet/v2/openwallet"
 )
 
 const (
@@ -350,10 +350,10 @@ func (bs *PIABlockScanner) ExtractTransaction(blockHeight uint64, blockHash stri
 		//订阅地址为交易单中的接收者
 		accountID2, ok2 := scanTargetFunc(openwallet.ScanTarget{Alias: transaction.To, Symbol: bs.wm.Symbol(), BalanceModelType: openwallet.BalanceModelTypeAccount})
 		if accountID1 == accountID2 && len(accountID1) > 0 && len(accountID2) > 0 {
-			bs.InitExtractResult(accountID1,transaction, &result, 0)
+			bs.InitExtractResult(accountID1, transaction, &result, 0)
 		} else {
 			if ok1 {
-				bs.InitExtractResult(accountID1,transaction, &result, 1)
+				bs.InitExtractResult(accountID1, transaction, &result, 1)
 			}
 
 			if ok2 {
@@ -369,7 +369,6 @@ func (bs *PIABlockScanner) ExtractTransaction(blockHeight uint64, blockHash stri
 
 //InitExtractResult optType = 0: 输入输出提取，1: 输入提取，2：输出提取
 func (bs *PIABlockScanner) InitExtractResult(sourceKey string, localTransaction *LocalTransaction, result *ExtractResult, optType int64) {
-
 
 	txExtractDataArray := result.extractData[sourceKey]
 	if txExtractDataArray == nil {
@@ -401,7 +400,6 @@ func (bs *PIABlockScanner) InitExtractResult(sourceKey string, localTransaction 
 		//ContractID: contractID,
 	}
 	//
-
 
 	transx := &openwallet.Transaction{
 		Fees:        "0",
@@ -589,9 +587,9 @@ func (bs *PIABlockScanner) GetGlobalHeadBlock() (block *ApiBlock, err error) {
 //GetCurrentBlockHeader 获取当前区块高度
 func (bs *PIABlockScanner) GetCurrentBlockHeader() (*openwallet.BlockHeader, error) {
 
-	apiBlock ,err := bs.GetGlobalHeadBlock()
+	apiBlock, err := bs.GetGlobalHeadBlock()
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 
 	return &openwallet.BlockHeader{Height: uint64(apiBlock.Height), Hash: string(apiBlock.Hash)}, nil
@@ -629,7 +627,6 @@ func (bs *PIABlockScanner) GetScannedBlockHeader() (*openwallet.BlockHeader, err
 	return &openwallet.BlockHeader{Height: blockHeight, Hash: hash}, nil
 }
 
-
 //GetScannedBlockHeight 获取已扫区块高度
 func (bs *PIABlockScanner) GetScannedBlockHeight() uint64 {
 	height, _, _ := bs.GetLocalBlockHead()
@@ -641,10 +638,10 @@ func (bs *PIABlockScanner) GetBalanceByAddress(address ...string) ([]*openwallet
 
 	addrBalanceArr := make([]*openwallet.Balance, 0)
 	for _, a := range address {
-		acc, err := bs.wm.Api.GetBalance(a)
+		acc, err := bs.wm.Api.GetBalance(a,bs.wm.Config.FeeString)
 		if err == nil {
 
-			b,_ := decimal.NewFromString(acc.Balance)
+			b, _ := decimal.NewFromString(acc.Balance)
 			obj := &openwallet.Balance{
 				Symbol:           bs.wm.Symbol(),
 				Address:          a,

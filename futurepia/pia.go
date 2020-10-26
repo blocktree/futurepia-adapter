@@ -17,8 +17,8 @@ package futurepia
 
 import (
 	"github.com/astaxie/beego/config"
-	"github.com/blocktree/openwallet/log"
-	"github.com/blocktree/openwallet/openwallet"
+	"github.com/blocktree/openwallet/v2/log"
+	"github.com/blocktree/openwallet/v2/openwallet"
 )
 
 //CurveType 曲线类型
@@ -68,7 +68,22 @@ func (wm *WalletManager) LoadAssetsConfig(c config.Configer) error {
 	wm.Config.ServerAPI = c.String("serverAPI")
 	wm.Api.BaseURL = wm.Config.ServerAPI
 	wm.Api.DelayTime, _ = c.Int64("delayTime")
-	wm.Config.ChainId = "0000000000000000000000000000000000000000000000000000000000000000"
+	wm.Config.ChainId = c.String("chainId")
+	if wm.Config.ChainId == "" {
+		wm.Config.ChainId = "0000000000000000000000000000000000000000000000000000000000000000"
+	}
+	wm.Config.AddressPrefix = c.String("addressPrefix")
+	if wm.Config.AddressPrefix == "" {
+		wm.Config.AddressPrefix = "FPA"
+	}
+
+	wm.Config.FeeString = c.String("feeString")
+	if wm.Config.FeeString == "" {
+		wm.Config.FeeString = "PIA"
+	}
+
+
+
 	wm.Config.DataDir = c.String("dataDir")
 
 	//数据文件夹

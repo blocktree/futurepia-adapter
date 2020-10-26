@@ -20,8 +20,6 @@ import (
 )
 
 var (
-	PIAPublicKeyPrefixCompat        = "FPA"
-	PIA_mainnetPublic               = addressEncoder.AddressType{"eos", addressEncoder.BTCAlphabet, "ripemd160", "", 33, []byte(PIAPublicKeyPrefixCompat), nil}
 	PIA_mainnetPrivateWIF           = addressEncoder.AddressType{"base58", addressEncoder.BTCAlphabet, "doubleSHA256", "", 32, []byte{0x80}, nil}
 	PIA_mainnetPrivateWIFCompressed = addressEncoder.AddressType{"base58", addressEncoder.BTCAlphabet, "doubleSHA256", "", 32, []byte{0x80}, []byte{0x01}}
 )
@@ -44,6 +42,9 @@ func (decoder *addressDecoder) PrivateKeyToWIF(priv []byte, isTestnet bool) (str
 
 //PublicKeyToAddress 公钥转地址
 func (decoder *addressDecoder) PublicKeyToAddress(pub []byte, isTestnet bool) (string, error) {
+	PIAPublicKeyPrefixCompat       := decoder.wm.Config.AddressPrefix
+	PIA_mainnetPublic               := addressEncoder.AddressType{"eos", addressEncoder.BTCAlphabet, "ripemd160", "", 33, []byte(PIAPublicKeyPrefixCompat), nil}
+
 	address := addressEncoder.AddressEncode(pub, PIA_mainnetPublic)
 	return address, nil
 }

@@ -20,14 +20,18 @@ import (
 	"testing"
 
 	"github.com/astaxie/beego/config"
-	"github.com/blocktree/openwallet/log"
-	"github.com/blocktree/openwallet/openw"
-	"github.com/blocktree/openwallet/openwallet"
+	"github.com/blocktree/openwallet/v2/log"
+	"github.com/blocktree/openwallet/v2/openw"
+	"github.com/blocktree/openwallet/v2/openwallet"
 )
 
 ////////////////////////// 测试单个扫描器 //////////////////////////
 
 type subscriberSingle struct {
+}
+
+func (sub *subscriberSingle) BlockExtractSmartContractDataNotify(sourceKey string, data *openwallet.SmartContractReceipt) error {
+	panic("implement me")
 }
 
 //BlockScanNotify 新区块扫描完成通知
@@ -53,12 +57,12 @@ func (sub *subscriberSingle) BlockExtractDataNotify(sourceKey string, data *open
 	return nil
 }
 
-func TestSubscribeAddress_EOS(t *testing.T) {
+func TestSubscribeAddress_PIA(t *testing.T) {
 
 	var (
 		endRunning = make(chan bool, 1)
 		symbol     = "PIA"
-		addrs = map[string]string{
+		addrs      = map[string]string{
 			"piajiahua": "sender",
 			//"eostesterbob": "sender",
 		}
@@ -96,7 +100,7 @@ func TestSubscribeAddress_EOS(t *testing.T) {
 
 	//log.Debug("already got scanner:", assetsMgr)
 	scanner := assetsMgr.GetBlockScanner()
-	//scanner.SetRescanBlockHeight(1763830)
+	scanner.SetRescanBlockHeight(11288040)
 
 	if scanner == nil {
 		log.Error(symbol, "is not support block scan")

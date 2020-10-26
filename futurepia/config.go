@@ -17,7 +17,7 @@ package futurepia
 
 import (
 	"github.com/blocktree/go-owcrypt"
-	"github.com/blocktree/openwallet/common/file"
+	"github.com/blocktree/openwallet/v2/common/file"
 	"path/filepath"
 	"strings"
 )
@@ -37,7 +37,6 @@ serverAPI = ""
 )
 
 type WalletConfig struct {
-
 	//币种
 	Symbol string
 	//配置文件路径
@@ -56,6 +55,9 @@ type WalletConfig struct {
 	CurveType uint32
 	//链ID
 	//ChainID uint64
+
+	AddressPrefix string
+	FeeString     string
 
 	ChainId string //链ID
 	//数据目录
@@ -82,6 +84,8 @@ func NewConfig(symbol string) *WalletConfig {
 	c.dbPath = filepath.Join("data", strings.ToLower(c.Symbol), "db")
 	//钱包服务API
 	c.ServerAPI = ""
+
+
 
 	//创建目录
 	//file.MkdirAll(c.dbPath)

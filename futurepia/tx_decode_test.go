@@ -19,52 +19,48 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"github.com/blocktree/openwallet/log"
+	"github.com/blocktree/openwallet/v2/log"
 	"github.com/eoscanada/eos-go"
 	"testing"
 	"time"
 )
 
-func TestLastBlock(t *testing.T){
+func TestLastBlock(t *testing.T) {
 	v := 1562721
-	result := (v-1) & 0xFFFF
+	result := (v - 1) & 0xFFFF
 	log.Warn(result)
 
 	v1 := "0017d8d9794ec4b1a6e5181139af96965ebfac5e"
-	result2 , _ := hex.DecodeString(v1)
-	log.Warn(readUInt32LE(result2,4, len(result2)))
+	result2, _ := hex.DecodeString(v1)
+	log.Warn(readUInt32LE(result2, 4, len(result2)))
 	//log.Warn(eos.JSONTime.Unix())
 }
-
-
 
 func TestTxBuild(t *testing.T) {
 	var params = make([]interface{}, 0)
 	//params = append(params,"")
 	params = append(params, &ParamDataTest{
-		From:   "kencani4",
-		To:     "kencani",
-		Memo:   "hello boy",
+		From: "kencani4",
+		To:   "kencani",
+		Memo: "hello boy",
 		Amount: eos.Asset{
-			Amount:100000000,
-			Symbol:eos.Symbol{
-				Precision:8,
-				Symbol:"PIA",
+			Amount: 100000000,
+			Symbol: eos.Symbol{
+				Precision: 8,
+				Symbol:    "PIA",
 			},
 		},
 	})
 	var paramss = make([][]interface{}, 0)
 	paramss = append(paramss, params)
 
-
-
 	//now := time.Now()
-	now,_ := time.Parse("2006-01-02T15:04:05Z","2019-06-04T08:55:36.000Z")
+	now, _ := time.Parse("2006-01-02T15:04:05Z", "2019-06-04T08:55:36.000Z")
 	//mm, _ := time.ParseDuration("60m")
 	//extensionTime := now.Add(mm)
 	realTime := now.Format(eos.JSONTimeFormat)
-	eosTime,err := eos.ParseJSONTime(realTime)
-	if err != nil{
+	eosTime, err := eos.ParseJSONTime(realTime)
+	if err != nil {
 		//return openwallet.NewError(3001,"createRawTransaction-ParseJSONTime err :" + err.Error())
 	}
 
@@ -140,16 +136,15 @@ func TestTxBuild(t *testing.T) {
 	//}
 	//fmt.Printf("% x\n", buf.Bytes())
 
-
-	result2,_:=json.Marshal(testMain)
+	result2, _ := json.Marshal(testMain)
 	log.Warn(string(result2))
 	txdata, err := eos.MarshalBinary(testMain)
 	txdata[11] = 2
 	//testData := []byte(`[["transfer",{"from":"kencani","to":"kencani4","amount":"1.00000000 PIA","memo":"test"}]]`)
 
-	for k,v := range target{
-		if v != txdata[k]{
-			log.Warn(" tx err : %d  %x   %x" ,k,v,txdata[k])
+	for k, v := range target {
+		if v != txdata[k] {
+			log.Warn(" tx err : %d  %x   %x", k, v, txdata[k])
 			//return
 		}
 	}
@@ -159,11 +154,11 @@ func TestTxBuild(t *testing.T) {
 	}
 	chainId, err := hex.DecodeString("0000000000000000000000000000000000000000000000000000000000000000")
 
-	result := make([]byte,83)
-	for i,v := range chainId{
+	result := make([]byte, 83)
+	for i, v := range chainId {
 		result[i] = v
 	}
-	for i,v := range txdata{
+	for i, v := range txdata {
 		result[i+32] = v
 	}
 	//result := eos.SigDigest(chainId, txdata, nil)

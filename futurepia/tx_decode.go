@@ -24,7 +24,7 @@ import (
 	"github.com/pkg/errors"
 	"time"
 
-	"github.com/blocktree/openwallet/openwallet"
+	"github.com/blocktree/openwallet/v2/openwallet"
 	"github.com/shopspring/decimal"
 )
 
@@ -64,7 +64,7 @@ func (decoder *TransactionDecoder) CreateRawTransaction(wrapper openwallet.Walle
 	}
 
 	//账户是否上链
-	accountBalance, err = decoder.wm.Api.GetBalance(account.Alias)
+	accountBalance, err = decoder.wm.Api.GetBalance(account.Alias,decoder.wm.Config.FeeString)
 	if err != nil || accountBalance == nil {
 		return fmt.Errorf("pia account of from not found on chain")
 	}
@@ -76,7 +76,7 @@ func (decoder *TransactionDecoder) CreateRawTransaction(wrapper openwallet.Walle
 	}
 
 	// 检查目标账户是否存在
-	accountTo, err := decoder.wm.Api.GetBalance(to)
+	accountTo, err := decoder.wm.Api.GetBalance(to,decoder.wm.Config.FeeString)
 	if err != nil || accountTo == nil {
 		return fmt.Errorf("pia account of to not found on chain")
 	}
@@ -326,7 +326,7 @@ func (decoder *TransactionDecoder) CreateSummaryRawTransactionWithError(wrapper 
 		return nil, fmt.Errorf("[%s] have not been created", accountID)
 	}
 
-	accountAsset, err := decoder.wm.Api.GetBalance(account.Alias)
+	accountAsset, err := decoder.wm.Api.GetBalance(account.Alias,decoder.wm.Config.FeeString)
 	if err != nil {
 		return nil, fmt.Errorf("pia account of to not found on chain")
 	}

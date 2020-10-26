@@ -16,11 +16,11 @@
 package openwtester
 
 import (
-	"github.com/blocktree/openwallet/openw"
+	"github.com/blocktree/openwallet/v2/openw"
 	"testing"
 
-	"github.com/blocktree/openwallet/log"
-	"github.com/blocktree/openwallet/openwallet"
+	"github.com/blocktree/openwallet/v2/log"
+	"github.com/blocktree/openwallet/v2/openwallet"
 )
 
 func testGetAssetsAccountBalance(tm *openw.WalletManager, walletID, accountID string) {
@@ -48,8 +48,8 @@ func testCreateTransactionStep(tm *openw.WalletManager, walletID, accountID, to,
 	//	log.Error("RefreshAssetsAccountBalance failed, unexpected error:", err)
 	//	return nil, err
 	//}
-
-	rawTx, err := tm.CreateTransaction(testApp, walletID, accountID, amount, to, feeRate, memo, contract)
+	extParam := make(map[string]interface{},0)
+	rawTx, err := tm.CreateTransaction(testApp, walletID, accountID, amount, to, feeRate, memo, contract,extParam)
 
 	if err != nil {
 		log.Error("CreateTransaction failed, unexpected error:", err)
@@ -127,32 +127,31 @@ func TestTransfer(t *testing.T) {
 	//accountID := "F7aeTnSdjEA16x4H3n1vPtDEo9Xp5Vus11pwY5QF6K3y"
 	//to := ""
 
-    for i:=0 ; i< 1 ; i++{
+	for i := 0; i < 1; i++ {
 
+		testGetAssetsAccountBalance(tm, walletID, accountID)
 
-	testGetAssetsAccountBalance(tm, walletID, accountID)
+		rawTx, err := testCreateTransactionStep(tm, walletID, accountID, to, "0.1", "", "", nil)
+		if err != nil {
+			return
+		}
 
-	rawTx, err := testCreateTransactionStep(tm, walletID, accountID, to, "0.1", "", "", nil)
-	if err != nil {
-		return
-	}
+		log.Std.Info("rawTx: %+v", rawTx)
 
-	log.Std.Info("rawTx: %+v", rawTx)
+		_, err = testSignTransactionStep(tm, rawTx)
+		if err != nil {
+			return
+		}
 
-	_, err = testSignTransactionStep(tm, rawTx)
-	if err != nil {
-		return
-	}
+		_, err = testVerifyTransactionStep(tm, rawTx)
+		if err != nil {
+			return
+		}
 
-	_, err = testVerifyTransactionStep(tm, rawTx)
-	if err != nil {
-		return
-	}
-
-	_, err = testSubmitTransactionStep(tm, rawTx)
-	if err != nil {
-		return
-	}
+		_, err = testSubmitTransactionStep(tm, rawTx)
+		if err != nil {
+			return
+		}
 	}
 }
 
@@ -199,4 +198,3 @@ func TestSummary(t *testing.T) {
 	}
 
 }
-
