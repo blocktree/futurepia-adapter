@@ -21,6 +21,7 @@ import (
 	"github.com/blocktree/openwallet/v2/openwallet"
 )
 
+var Decimal int32 = 8
 //CurveType 曲线类型
 func (wm *WalletManager) CurveType() uint32 {
 	return wm.Config.CurveType
@@ -38,7 +39,7 @@ func (wm *WalletManager) Symbol() string {
 
 //Decimal 小数位精度
 func (wm *WalletManager) Decimal() int32 {
-	return 8
+	return Decimal
 }
 
 //BalanceModelType 余额模型类型
