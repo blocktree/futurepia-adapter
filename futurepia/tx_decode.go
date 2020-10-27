@@ -384,14 +384,14 @@ func (decoder *TransactionDecoder) createRawTransaction(
 	to string,
 	memo string) *openwallet.Error {
 
-	apiHead, err := decoder.wm.Api.getDynamicGlobal()
+	apiHead, err := decoder.wm.Api.GetDynamicGlobal()
 	if err != nil {
-		return openwallet.NewError(3004, "createRawTransaction-getDynamicGlobal err :"+err.Error())
+		return openwallet.NewError(3004, "createRawTransaction-GetDynamicGlobal err :"+err.Error())
 	}
 
-	apiBlock, err := decoder.wm.Api.getGetBlock(uint64(apiHead.LastIrreversible))
+	apiBlock, err := decoder.wm.Api.GetGetBlock(uint64(apiHead.LastIrreversible))
 	if err != nil {
-		return openwallet.NewError(3004, "createRawTransaction-getGetBlock err :"+err.Error())
+		return openwallet.NewError(3004, "createRawTransaction-GetGetBlock err :"+err.Error())
 	}
 
 	var (

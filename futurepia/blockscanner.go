@@ -128,7 +128,7 @@ func (bs *PIABlockScanner) ScanBlockTask() {
 		currentHeight = currentHeight + 1
 
 		bs.wm.Log.Std.Info("block scanner scanning height: %d ...", currentHeight)
-		block, err := bs.wm.Api.getGetBlock(uint64(currentHeight))
+		block, err := bs.wm.Api.GetGetBlock(uint64(currentHeight))
 
 		if err != nil {
 			bs.wm.Log.Std.Info("block scanner can not get new block data by rpc; unexpected error: %v", err)
@@ -155,7 +155,7 @@ func (bs *PIABlockScanner) ScanBlockTask() {
 				bs.wm.Log.Std.Error("block scanner can not get local block; unexpected error: %v", err)
 				//get block from rpc
 				bs.wm.Log.Info("block scanner prev block height:", currentHeight)
-				curBlock, err := bs.wm.Api.getGetBlock(uint64(currentHeight))
+				curBlock, err := bs.wm.Api.GetGetBlock(uint64(currentHeight))
 				if err != nil {
 					bs.wm.Log.Std.Error("block scanner can not get prev block by rpc; unexpected error: %v", err)
 					break
@@ -510,7 +510,7 @@ func (bs *PIABlockScanner) newExtractDataNotify(height uint64, extractData map[s
 //ScanBlock 扫描指定高度区块
 func (bs *PIABlockScanner) ScanBlock(height uint64) error {
 
-	block, err := bs.wm.Api.getGetBlock(uint64(height))
+	block, err := bs.wm.Api.GetGetBlock(uint64(height))
 	if err != nil {
 		bs.wm.Log.Std.Info("block scanner can not get new block data; unexpected error: %v", err)
 
@@ -547,7 +547,7 @@ func (bs *PIABlockScanner) SetRescanBlockHeight(height uint64) error {
 		return errors.New("block height to rescan must greater than 0. ")
 	}
 
-	block, err := bs.wm.Api.getGetBlock(uint64(height - 1))
+	block, err := bs.wm.Api.GetGetBlock(uint64(height - 1))
 	if err != nil {
 		return err
 	}
@@ -559,7 +559,7 @@ func (bs *PIABlockScanner) SetRescanBlockHeight(height uint64) error {
 
 // GetGlobalMaxBlockHeight GetGlobalMaxBlockHeight
 func (bs *PIABlockScanner) GetGlobalMaxBlockHeight() uint64 {
-	headBlock, err := bs.wm.Api.getDynamicGlobal()
+	headBlock, err := bs.wm.Api.GetDynamicGlobal()
 	if err != nil {
 		bs.wm.Log.Std.Info("get global head block error;unexpected error:%v", err)
 		return 0
@@ -569,13 +569,13 @@ func (bs *PIABlockScanner) GetGlobalMaxBlockHeight() uint64 {
 
 //GetGlobalHeadBlock GetGlobalHeadBlock
 func (bs *PIABlockScanner) GetGlobalHeadBlock() (block *ApiBlock, err error) {
-	headBlock, err := bs.wm.Api.getDynamicGlobal()
+	headBlock, err := bs.wm.Api.GetDynamicGlobal()
 	if err != nil {
 		bs.wm.Log.Std.Info("get global head block error;unexpected error:%v", err)
 		return
 	}
 
-	block, err = bs.wm.Api.getGetBlock(uint64(headBlock.Height - 1))
+	block, err = bs.wm.Api.GetGetBlock(uint64(headBlock.Height - 1))
 	if err != nil {
 		bs.wm.Log.Std.Info("block scanner can not get block by height; unexpected error:%v", err)
 		return
@@ -617,7 +617,7 @@ func (bs *PIABlockScanner) GetScannedBlockHeader() (*openwallet.BlockHeader, err
 		blockHeight = blockHeader.Height
 		//就上一个区块链为当前区块
 		blockHeight = blockHeight - 1
-		curBlock, err := bs.wm.Api.getGetBlock(uint64(blockHeight))
+		curBlock, err := bs.wm.Api.GetGetBlock(uint64(blockHeight))
 		if err != nil {
 			return nil, err
 		}

@@ -109,7 +109,7 @@ type ApiTransResult struct {
 }
 
 //获取最新高度区块信息
-func (this *Client) getDynamicGlobal() (*ApiHeadBlock, error) {
+func (this *Client) GetDynamicGlobal() (*ApiHeadBlock, error) {
 	params := []interface{}{
 		//appendOxToAddress(addr),
 		"database_api",
@@ -118,12 +118,12 @@ func (this *Client) getDynamicGlobal() (*ApiHeadBlock, error) {
 	}
 	result, err := this.Call("call", 1, params)
 	if err != nil {
-		log.Errorf("getDynamicGlobal number faield, err = %v \n", err)
+		log.Errorf("GetDynamicGlobal number faield, err = %v \n", err)
 		return nil, err
 	}
 
 	if result.Type != gjson.JSON {
-		log.Errorf("result of getDynamicGlobal type error")
+		log.Errorf("result of GetDynamicGlobal type error")
 		return nil, errors.New("result of block number type error")
 	}
 
@@ -188,11 +188,11 @@ func (this *Client) GetBalance(account ,feeString string) (*ApiBalance, error) {
 
 //获取最新高度区块
 func (this *Client) getGetTopBlock() (*ApiBlock, error) {
-	apiHead, err := this.getDynamicGlobal()
+	apiHead, err := this.GetDynamicGlobal()
 	if err != nil {
 		return nil, err
 	}
-	block, err := this.getGetBlock(uint64(apiHead.Height))
+	block, err := this.GetGetBlock(uint64(apiHead.Height))
 	if err != nil {
 		return nil, err
 	}
@@ -200,7 +200,7 @@ func (this *Client) getGetTopBlock() (*ApiBlock, error) {
 }
 
 //根据高度获取区块
-func (this *Client) getGetBlock(block uint64) (*ApiBlock, error) {
+func (this *Client) GetGetBlock(block uint64) (*ApiBlock, error) {
 	params := []interface{}{
 		"database_api",
 		"get_block",
