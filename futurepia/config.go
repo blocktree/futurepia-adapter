@@ -58,7 +58,7 @@ type WalletConfig struct {
 
 	AddressPrefix string
 	FeeString     string
-
+	Decimal int64
 	ChainId string //链ID
 	//数据目录
 	DataDir string

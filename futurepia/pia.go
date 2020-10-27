@@ -83,7 +83,12 @@ func (wm *WalletManager) LoadAssetsConfig(c config.Configer) error {
 		wm.Config.FeeString = "PIA"
 	}
 
-
+	wm.Config.Decimal, _ = c.Int64("decimal")
+	if wm.Config.Decimal == 0 {
+		Decimal = 8
+	} else {
+		Decimal = int32(wm.Config.Decimal)
+	}
 
 	wm.Config.DataDir = c.String("dataDir")
 
