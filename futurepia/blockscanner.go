@@ -29,9 +29,7 @@ const (
 	blockchainBucket = "blockchain" // blockchain dataset
 	//periodOfTask      = 5 * time.Second // task interval
 	maxExtractingSize = 10 // thread count
-	coinTag           = "PIA"
 )
-
 //PIABlockScanner PIA block scanner
 type PIABlockScanner struct {
 	*openwallet.BlockScannerBase
@@ -70,7 +68,6 @@ func NewPIABlockScanner(wm *WalletManager) *PIABlockScanner {
 	bs.wm = wm
 	bs.IsScanMemPool = true
 	bs.RescanLastBlockCount = 0
-
 	// set task
 	bs.SetTask(bs.ScanBlockTask)
 
@@ -327,8 +324,8 @@ func (bs *PIABlockScanner) ExtractTransaction(blockHeight uint64, blockHash stri
 		}
 	)
 
-	if transaction.CoinTag != coinTag {
-		bs.wm.Log.Std.Debug("transaction not the pia: %s", transaction.TxId, ":", transaction.CoinTag)
+	if transaction.CoinTag != bs.wm.Symbol() {
+		bs.wm.Log.Std.Debug("transaction not the  %s : %s",bs.wm.Symbol(), transaction.TxId, ":", transaction.CoinTag)
 		return ExtractResult{Success: true}
 	}
 
