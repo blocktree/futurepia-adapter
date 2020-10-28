@@ -239,7 +239,7 @@ func (bs *PIABlockScanner) BatchExtractTransactions(blockHeight uint64, blockHas
 				}
 			} else {
 				//记录未扫区块
-				unscanRecord := NewUnscanRecord(height, "", "")
+				unscanRecord := openwallet.NewUnscanRecord(height, "", "",bs.wm.Symbol())
 				bs.SaveUnscanRecord(unscanRecord)
 				failed++ //标记保存失败数
 			}
@@ -489,7 +489,7 @@ func (bs *PIABlockScanner) newExtractDataNotify(height uint64, extractData map[s
 				if err != nil {
 					log.Error("BlockExtractDataNotify unexpected error:", err)
 					//记录未扫区块
-					unscanRecord := NewUnscanRecord(height, "", "ExtractData Notify failed.")
+					unscanRecord := openwallet.NewUnscanRecord(height, "", "ExtractData Notify failed.",bs.wm.Symbol())
 					err = bs.SaveUnscanRecord(unscanRecord)
 					if err != nil {
 						log.Std.Error("block height: %d, save unscan record failed. unexpected error: %v", height, err.Error())
@@ -512,7 +512,7 @@ func (bs *PIABlockScanner) ScanBlock(height uint64) error {
 		bs.wm.Log.Std.Info("block scanner can not get new block data; unexpected error: %v", err)
 
 		//记录未扫区块
-		unscanRecord := NewUnscanRecord(height, "", err.Error())
+		unscanRecord := openwallet.NewUnscanRecord(height, "", err.Error(), bs.wm.Symbol())
 		bs.SaveUnscanRecord(unscanRecord)
 		bs.wm.Log.Std.Info("block height: %d extract failed.", height)
 		return err
@@ -653,4 +653,11 @@ func (bs *PIABlockScanner) GetBalanceByAddress(address ...string) ([]*openwallet
 	}
 
 	return addrBalanceArr, nil
+}
+
+
+//SupportBlockchainDAI 支持外部设置区块链数据访问接口
+//@optional
+func (bs *PIABlockScanner) SupportBlockchainDAI() bool {
+	return true
 }
