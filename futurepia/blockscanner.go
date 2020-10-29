@@ -182,7 +182,7 @@ func (bs *PIABlockScanner) ScanBlockTask() {
 			currentHash = hash
 			//保存本地新高度
 			bs.SaveLocalBlockHead(currentHeight, currentHash)
-			bs.SaveLocalBlock(ParseBlock(block))
+			bs.SaveLocalBlock(ParseBlock(block,bs.wm.Symbol()))
 			//通知新区块给观测者，异步处理
 			bs.newBlockNotify(block)
 		}
@@ -198,7 +198,7 @@ func (bs *PIABlockScanner) forkBlockNotify(block *Block) {
 
 //newBlockNotify 获得新区块后，通知给观测者
 func (bs *PIABlockScanner) newBlockNotify(block *ApiBlock) {
-	header := ParseHeader(block)
+	header := ParseHeader(block,bs.wm.Symbol())
 	bs.NewBlockNotify(header)
 }
 

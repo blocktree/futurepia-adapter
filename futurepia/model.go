@@ -132,7 +132,7 @@ type TransConMainSub struct {
 //}
 
 // ParseHeader 区块链头
-func ParseHeader(b *ApiBlock) *openwallet.BlockHeader {
+func ParseHeader(b *ApiBlock,symbol string) *openwallet.BlockHeader {
 	obj := openwallet.BlockHeader{}
 
 	//解析josn
@@ -141,12 +141,12 @@ func ParseHeader(b *ApiBlock) *openwallet.BlockHeader {
 	obj.Previousblockhash = b.PreviousHash
 	obj.Height = uint64(b.Height)
 	obj.Time = uint64(b.Timestamp)
-	obj.Symbol = Symbol
+	obj.Symbol = symbol
 	return &obj
 }
 
 // ParseBlock 区块
-func ParseBlock(b *ApiBlock) *Block {
+func ParseBlock(b *ApiBlock,symbol string) *Block {
 	obj := Block{}
 
 	//解析josn
@@ -155,6 +155,6 @@ func ParseBlock(b *ApiBlock) *Block {
 	obj.Previousblockhash = b.PreviousHash
 	obj.Height = uint32(b.Height)
 	obj.Time = uint64(b.Timestamp)
-	obj.Symbol = Symbol
+	obj.Symbol = symbol
 	return &obj
 }
