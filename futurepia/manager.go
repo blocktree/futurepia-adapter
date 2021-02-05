@@ -45,3 +45,11 @@ func NewWalletManager() *WalletManager {
 	wm.ContractDecoder = NewContractDecoder(&wm)
 	return &wm
 }
+
+
+
+//GetAddressDecode 地址解析器
+//如果实现了AddressDecoderV2，就无需实现AddressDecoder
+func (a *WalletManager) GetAddressDecoderV2() openwallet.AddressDecoderV2 {
+	return a.DecoderV2
+}
